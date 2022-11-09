@@ -4,6 +4,7 @@ import (
 	"embed"
 	"encoding/json"
 	"net/http"
+	"text/template"
 
 	"github.com/gorilla/mux"
 )
@@ -27,7 +28,9 @@ func BuildWebRouter() *mux.Router {
 }
 
 func WebIndex(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte(*WebIndexHtml))
+	t := template.New("index")
+	t.Parse(*WebIndexHtml)
+	t.Execute(w, Global)
 }
 
 func WebApi(w http.ResponseWriter, r *http.Request) {
