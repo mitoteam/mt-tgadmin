@@ -25,5 +25,6 @@ func init() {
 	Global.Version = BuildVersion
 	Global.Commit = BuildCommit
 	Global.BuiltWith = runtime.Version()
+
 	Global.SettingsFilename = DefaultSettingsFilename
 }

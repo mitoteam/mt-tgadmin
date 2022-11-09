@@ -3,6 +3,7 @@
 package cmd
 
 import (
+	"log"
 	"mt-tgadmin/app"
 	"mt-tgadmin/mttools"
 
@@ -32,12 +33,8 @@ Copyright: MiTo Team, https://mito-team.com`,
 
 			//mttools.PrintYamlSettings(app.Global.Settings)
 		} else {
-			//create settings file with default settings
-			app.Global.Settings.BotName = "Bot Name"
-
-			err := mttools.SaveYamlSettingToFile(app.Global.SettingsFilename, app.Global.AppName+" settings file", &app.Global.Settings)
-			if err != nil {
-				return err
+			if cmd.Name() != "init" {
+				log.Fatalln("No bot settings file found. Please create one or use `" + app.Global.AppName + " init` command.")
 			}
 		}
 
@@ -49,7 +46,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(
 		&app.Global.SettingsFilename,
 		"settings",
-		app.DefaultSettingsFilename,
+		app.Global.SettingsFilename,
 		"Filename or full path to bot settings file.",
 	)
 }
