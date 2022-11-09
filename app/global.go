@@ -27,4 +27,9 @@ func init() {
 	Global.BuiltWith = runtime.Version()
 
 	Global.SettingsFilename = DefaultSettingsFilename
+
+	//default settings
+	Global.Settings.GuiPassword = "mitoteam"
+	Global.Settings.GuiHostname = "localhost"
+	Global.Settings.GuiPort = 15080
 }
