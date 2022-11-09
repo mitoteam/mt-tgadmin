@@ -16,7 +16,8 @@ var Global struct {
 	Commit    string
 	BuiltWith string
 
-	SettingsFilename string
+	SettingsFilename string   //filename
+	Settings         Settings //settings object
 }
 
 func init() {

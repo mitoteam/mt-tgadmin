@@ -4,6 +4,7 @@ package cmd
 
 import (
 	"mt-tgadmin/app"
+	"mt-tgadmin/mttools"
 
 	"github.com/spf13/cobra"
 )
@@ -21,6 +22,26 @@ Copyright: MiTo Team, https://mito-team.com`,
 	Run: func(cmd *cobra.Command, args []string) {
 		//show help if no subcommand given
 		cmd.Help()
+	},
+
+	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		if mttools.IsFileExists(app.Global.SettingsFilename) {
+			if err := mttools.LoadYamlSettingFromFile(app.Global.SettingsFilename, &app.Global.Settings); err != nil {
+				return err
+			}
+
+			//mttools.PrintYamlSettings(app.Global.Settings)
+		} else {
+			//create settings file with default settings
+			app.Global.Settings.BotName = "Bot Name"
+
+			err := mttools.SaveYamlSettingToFile(app.Global.SettingsFilename, app.Global.AppName+" settings file", &app.Global.Settings)
+			if err != nil {
+				return err
+			}
+		}
+
+		return nil
 	},
 }
 
