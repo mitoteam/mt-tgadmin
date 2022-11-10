@@ -2,20 +2,19 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>{{.AppName}}</title>
+    <title>{{.Global.AppName}}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link href="/assets/style.css" rel="stylesheet" />
   </head>
   <body>
 
     <div class="container">
-      <h1>{{.AppName}}</h1>
-      <p class="small text-muted">v.{{.Version}}, commit {{.Commit}}, built with {{.BuiltWith}}</p>
+      <h1>{{.Global.AppName}}</h1>
+      <p class="small text-muted">v.{{.Global.Version}}, commit {{.Global.Commit}}, built with {{.Global.BuiltWith}}</p>
 
       <div id="app">
-        [[ message ]]
-        <hr/>
-        <component-auth></component-auth>
+        <div v-if="session">ASD</div>
+        <component-auth v-else></component-auth>
       </div>
 
     </div>

@@ -1,3 +1,4 @@
+//#region Components
 let ComponentAuth = {
   data() {
     return {
@@ -5,11 +6,16 @@ let ComponentAuth = {
     }
   },
   template: `
-    Some text
-    <button @click="count++">
-      You clicked me {{ count }} times.
-    </button>`
+<form>
+  <div class="mb-3">
+    <label for="password" class="form-label">Password please</label>
+    <input type="password" class="form-control" id="password">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+`
 }
+//#endregion
 
 //#region Main code
 
@@ -20,7 +26,7 @@ Vue.createApp({
   },
   data() {
     return {
-      message: 'Hello Vue!'
+      session: true
     }
   }
 }).mount('#app')

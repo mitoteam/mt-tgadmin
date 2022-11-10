@@ -2,7 +2,7 @@ package app
 
 import (
 	"embed"
-	"encoding/json"
+	"log"
 	"net/http"
 	"text/template"
 
@@ -15,8 +15,11 @@ var WebIndexHtml *string
 func BuildWebRouter() *mux.Router {
 	router := mux.NewRouter()
 
-	//test
-	router.HandleFunc("/api", WebApi)
+	//API
+	router.PathPrefix("/api").Subrouter().
+		HandleFunc("/password", ApiPassword)
+
+	router.HandleFunc("/api", ApiHealthCheck)
 
 	//serve assets
 	router.PathPrefix("/assets").Handler(http.FileServer(http.FS(WebAssets))).Methods("GET")
@@ -28,11 +31,24 @@ func BuildWebRouter() *mux.Router {
 }
 
 func WebIndex(w http.ResponseWriter, r *http.Request) {
+	session, _ := API.SessionStore.Get(r, sessionName)
+
 	t := template.New("index")
-	t.Parse(*WebIndexHtml)
-	t.Execute(w, Global)
+	if _, err := t.Parse(*WebIndexHtml); err != nil {
+		log.Fatalln(err)
+	}
+
+	data := &indexData{
+		Global: Global,
+		Auth:   session.Values["auth"] == true,
+	}
+
+	if err := t.Execute(w, data); err != nil {
+		log.Fatalln(err)
+	}
 }
 
-func WebApi(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(map[string]bool{"ok": true})
+type indexData struct {
+	Global interface{}
+	Auth   bool
 }

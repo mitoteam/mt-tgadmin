@@ -34,7 +34,7 @@ func init() {
 
 			go func() {
 				if err := httpSrv.ListenAndServe(); err != nil {
-					log.Fatalln(err)
+					log.Println(err)
 				}
 			}()
 
