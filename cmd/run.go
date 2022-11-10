@@ -23,7 +23,7 @@ func init() {
 
 			//Graceful shutdown according to https://github.com/gorilla/mux#graceful-shutdown
 			httpSrv := &http.Server{
-				Addr:         ":" + strconv.FormatUint(uint64(app.Global.Settings.GuiPort), 10),
+				Addr:         "localhost:" + strconv.FormatUint(uint64(app.Global.Settings.GuiPort), 10),
 				WriteTimeout: time.Second * 10,
 				ReadTimeout:  time.Second * 20,
 				IdleTimeout:  time.Second * 60,

@@ -1,8 +1,28 @@
 {
     "cSpell.words": [
-        "mitoteam",
-        "mttools",
-        "tgadmin",
-        "unmarshalling"
+      "endregion",
+      "mitoteam",
+      "mttools",
+      "tgadmin",
+      "unmarshalling"
+    ],
+    "files.eol": "\n",
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    "editor.rulers": [120,200],
+    "filewatcher.commands": [
+      {
+        "match": "\\.js$",
+        "isAsync": true,
+        "cmd": "terser \"${file}\" --mangle --compress -o \"${fileDirname}/${fileBasenameNoExt}.min.js\"",
+        "event": "onFileChange"
+      },
+      {
+        "match": "\\.scss$",
+        "isAsync": true,
+        "cmd": "sass --stop-on-error --no-source-map --style=compressed \"${file}:${fileDirname}/${fileBasenameNoExt}.css\"",
+        "event": "onFileChange"
+      }
     ]
 }
