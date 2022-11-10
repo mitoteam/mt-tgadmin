@@ -16,8 +16,9 @@ func BuildWebRouter() *mux.Router {
 	router := mux.NewRouter()
 
 	//API
-	router.PathPrefix("/api").Subrouter().
-		HandleFunc("/password", ApiPassword)
+	subrouter := router.PathPrefix("/api").Subrouter()
+	subrouter.HandleFunc("/password", ApiPassword)
+	subrouter.HandleFunc("/logout", ApiLogout)
 
 	router.HandleFunc("/api", ApiHealthCheck)
 
