@@ -18,6 +18,9 @@ var Global struct {
 
 	SettingsFilename string   //filename
 	Settings         Settings //settings object
+
+	BotInfo  string
+	ChatInfo string
 }
 
 func init() {
@@ -32,4 +35,7 @@ func init() {
 	Global.Settings.GuiPassword = "mitoteam"
 	Global.Settings.GuiHostname = "localhost"
 	Global.Settings.GuiPort = 15080
+
+	Global.BotInfo = "[undefined]"
+	Global.ChatInfo = "[undefined]"
 }

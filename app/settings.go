@@ -2,7 +2,8 @@
 package app
 
 type Settings struct {
-	BotToken string `yaml:"bot_token" yaml_comment:"Bot authorization token"`
+	BotToken  string `yaml:"bot_token" yaml_comment:"Bot authorization token"`
+	BotChatID int64  `yaml:"bot_chat_id" yaml_comment:"'chat_id' int64 value"`
 
 	GuiCookieSecretKey string `yaml:"gui_cookie_secret_key" yaml_comment:"At least 32 chars"`
 	GuiPassword        string `yaml:"gui_password" yaml_comment:"GUI access password"`

@@ -14,6 +14,10 @@
     <div class="container border m-5 p-3 bg-light">
       <h1>{{.Global.AppName}}</h1>
       <p class="small text-muted">v.{{.Global.Version}}, commit {{.Global.Commit}}, built with {{.Global.BuiltWith}}</p>
+      <p>
+        <b>Bot</b>: {{.Global.BotInfo}}<br>
+        <b>Chat</b>: {{.Global.ChatInfo}}
+      </p>
 
       <div id="app">
         <component-message v-bind="message"></component-message>

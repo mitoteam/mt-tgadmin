@@ -36,7 +36,22 @@ func InitApi() bool {
 		return false
 	}
 
-	log.Printf("Authorized on telegram account @%s\n", tgBot.Self.UserName)
+	Global.BotInfo = tgBot.Self.FirstName + " " + tgBot.Self.LastName + " (@" + tgBot.Self.UserName + ")"
+	log.Printf("Authorized on telegram bot: %s\n", Global.BotInfo)
+
+	if Global.Settings.BotChatID == 0 {
+		log.Println("bot_chat_id required")
+		return false
+	}
+
+	chat, err := tgBot.GetChat(tgbotapi.ChatInfoConfig{ChatConfig: tgbotapi.ChatConfig{ChatID: Global.Settings.BotChatID}})
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+
+	Global.ChatInfo = chat.Type + " \"" + chat.Title + "\", " + chat.InviteLink
+	log.Printf("Chat info: %s\n", Global.ChatInfo)
 
 	return true
 }
@@ -89,17 +104,17 @@ func NewApiRequest(responseWriter *http.ResponseWriter, request *http.Request) (
 	//log.Println(string(body))
 
 	if json.Valid(body) {
-		if err := json.Unmarshal(body, &r.outData); err != nil {
+		if err := json.Unmarshal(body, &r.inData); err != nil {
 			return nil, err
 		}
 	}
-	//log.Println(r.outData)
+	//log.Println(r.inData)
 
 	return r, nil
 }
 
 func (r *apiRequest) getInData(name string) string {
-	if value, ok := r.outData[name]; ok {
+	if value, ok := r.inData[name]; ok {
 		return value.(string)
 	} else {
 		return ""

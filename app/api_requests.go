@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"strings"
+
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 func (r *apiRequest) Run(path string) {
@@ -30,7 +32,7 @@ func (r *apiRequest) Run(path string) {
 		}
 	}
 
-	if r.getInData("status") == "" {
+	if r.getOutData("status") == "" {
 		r.setStatus("ok", r.getOutData("message"))
 	}
 }
@@ -62,7 +64,13 @@ func (r *apiRequest) Logout() {
 }
 
 func (r *apiRequest) Say() {
-	message := r.getInData("message")
+	text := r.getInData("message")
 
-	log.Println("Said: ", message)
+	//text = tgbotapi.EscapeText("MarkdownV2", text)
+
+	msg := tgbotapi.NewMessage(Global.Settings.BotChatID, text)
+	//msg.ParseMode = "MarkdownV2"
+	tgBot.Send(msg)
+
+	log.Println("Said: ", text)
 }

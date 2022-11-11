@@ -8,6 +8,7 @@
 
 # Bot authorization token
 bot_token: "5745757811:AADOGQhUinxdvNСlXUРSZGВ0vlrd_qхWlR0"
+bot_chat_id: -234543
 
 # GUI cookie secret key
 gui_cookie_secret_key: "Please change this in production environment"
