@@ -6,6 +6,7 @@
       "mttools",
       "Subrouter",
       "tgadmin",
+      "tgbotapi",
       "unmarshalling"
     ],
     "files.eol": "\n",

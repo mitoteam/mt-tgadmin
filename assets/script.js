@@ -3,13 +3,56 @@
 let ComponentMain = {
   data() {
     return {
-      count: 0
+      message: ""
     }
   },
+
+  methods: {
+    logout: function () {
+      //alert('logout');
+      ApiRequest('logout', null, this, function (response) {
+        //console.log(response);
+        MtData.session = false; //adjust GUI
+      });
+    },
+
+    say: function () {
+      let data = {
+        message: document.getElementById('messageEditor').value,
+      }
+
+      //console.log(data); return;
+
+      ApiRequest('say', data, this, function (response) {
+        //console.log(response);
+
+        if(response.status == "ok")
+        {
+
+        }
+      });
+    },
+  },
+
   template: `
-  <div class="mb-3">
-    <button class="btn btn-primary" @click="$parent.logout();">Logout</button>
+<div id="actions" class="card mb-3">
+  <div class="card-body">
+    <div class="d-flex justify-content-between">
+      <div>
+        no actions yet
+      </div>
+      <div>
+        <a class="btn btn-secondary" @click="logout();">Logout</a>
+      </div>
+    </div>
   </div>
+</div>
+
+<div>
+  <label for="messageEditor" class="form-label fw-bold">Message:</label>
+  <textarea class="form-control" id="messageEditor" rows="10" placeholder="Message text"></textarea>
+  <a class="btn btn-success mt-3" @click="say()">Say</a>
+</div>
 `
 }
 
@@ -70,31 +113,25 @@ let ComponentAuth = {
 var MtData = {
   // take initial value from global variable provided in index.html
   session: mtAuth,
-  message: { body: "", kind: "primary" }
+  message: { body: "", kind: "primary" },
 }
 
 Vue.createApp({
   // delimiters are set only for this component (index.html is go template). Each component has it own delimiters.
   delimiters: ['[[', ']]'],
+
   components: {
     ComponentMessage: ComponentMessage,
     ComponentMain: ComponentMain,
     ComponentAuth: ComponentAuth
   },
-  methods: {
-    logout: function () {
-      //alert('logout');
-      ApiRequest('logout', null, this, function (response) {
-        //console.log(response);
-        MtData.session = false; //adjust GUI
-      });
-    }
-  },
+
   data() {
     MtData = Vue.reactive(MtData);
     return MtData;
   }
-}).mount('#app')
+})
+.mount('#app')
 
 //#endregion
 
