@@ -19,6 +19,9 @@ func (r *apiRequest) Run(path string) {
 			case "logout":
 				r.Logout()
 
+			case "say":
+				r.Say()
+
 			default:
 				message := "Unknown API request: " + path
 				log.Println(message)
@@ -56,4 +59,10 @@ func (r *apiRequest) Logout() {
 	r.session.Save(r.request, *r.responseWriter)
 
 	r.setStatus("info", "Good bye!")
+}
+
+func (r *apiRequest) Say() {
+	message := r.getInData("message")
+
+	log.Println("Said: ", message)
 }

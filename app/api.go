@@ -7,15 +7,38 @@ import (
 	"net/http"
 	"strings"
 
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/gorilla/sessions"
 )
 
 const sessionName = "mtsession"
 
 var apiSessionStore *sessions.CookieStore
+var tgBot *tgbotapi.BotAPI
 
-func init() {
-	apiSessionStore = sessions.NewCookieStore([]byte("mt-tgadmin super secret key"))
+func InitApi() bool {
+	if len(Global.Settings.GuiCookieSecretKey) < 32 {
+		log.Println("gui_cookie_secret_key should be at least 32 characters long")
+		return false
+	}
+
+	apiSessionStore = sessions.NewCookieStore([]byte(Global.Settings.GuiCookieSecretKey))
+
+	if len(Global.Settings.BotToken) == 0 {
+		log.Println("bot_token required")
+		return false
+	}
+
+	var err error
+	tgBot, err = tgbotapi.NewBotAPI(Global.Settings.BotToken)
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+
+	log.Printf("Authorized on telegram account @%s\n", tgBot.Self.UserName)
+
+	return true
 }
 
 func WebApiRequestHandler(w http.ResponseWriter, r *http.Request) {

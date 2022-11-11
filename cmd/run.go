@@ -19,18 +19,24 @@ func init() {
 		Short: "Runs web GUI",
 
 		RunE: func(cmd *cobra.Command, args []string) error {
+			if !app.InitApi() {
+				return nil
+			}
+
 			router := app.BuildWebRouter()
+
+			address := "localhost:" + strconv.FormatUint(uint64(app.Global.Settings.GuiPort), 10)
 
 			//Graceful shutdown according to https://github.com/gorilla/mux#graceful-shutdown
 			httpSrv := &http.Server{
-				Addr:         "localhost:" + strconv.FormatUint(uint64(app.Global.Settings.GuiPort), 10),
+				Addr:         address,
 				WriteTimeout: time.Second * 10,
 				ReadTimeout:  time.Second * 20,
 				IdleTimeout:  time.Second * 60,
 				Handler:      router,
 			}
 
-			log.Println("Starting up web server. Press Ctrl + C to stop it.")
+			log.Printf("Starting up web server at %s\nPress Ctrl + C to stop it.\n", address)
 
 			go func() {
 				if err := httpSrv.ListenAndServe(); err != nil {
