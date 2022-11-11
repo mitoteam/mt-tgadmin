@@ -3,7 +3,6 @@ package app
 import (
 	"encoding/json"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -47,7 +46,7 @@ func ApiHealthCheck(w http.ResponseWriter, r *http.Request) {
 }
 
 func ApiPassword(w http.ResponseWriter, r *http.Request) {
-	body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
+	body, err := io.ReadAll(io.LimitReader(r.Body, 1048576))
 	if err != nil {
 		log.Println(err)
 	}
