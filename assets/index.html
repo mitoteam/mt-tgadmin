@@ -16,6 +16,8 @@
       <p class="small text-muted">v.{{.Global.Version}}, commit {{.Global.Commit}}, built with {{.Global.BuiltWith}}</p>
 
       <div id="app">
+        <component-message v-bind="message"></component-message>
+
         <component-main v-if="session"></component-main>
         <component-auth v-else=""></component-auth>
       </div>

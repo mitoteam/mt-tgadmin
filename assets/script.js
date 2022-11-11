@@ -13,6 +13,21 @@ let ComponentMain = {
 `
 }
 
+let ComponentMessage = {
+  props: {
+    body: String,
+    kind: {
+      type: String,
+      default: "primary",
+    },
+  },
+
+  template: `
+<div v-if="body" :class="['mb-3', 'alert', 'alert-' + kind]" role="alert">
+  {{body}}
+</div>`
+}
+
 let ComponentAuth = {
   data() {
     return {
@@ -31,10 +46,13 @@ let ComponentAuth = {
         if(response.status == "OK")
         {
           this.$parent.session = true; //adjust GUI
+          this.$parent.message.body = "";
         }
         else
         {
-          alert(response.message);
+          //alert(response.message);
+          this.$parent.message.body = response.message;
+          this.$parent.message.kind = 'danger';
           document.getElementById('password').value = '';
         }
       });
@@ -53,8 +71,10 @@ let ComponentAuth = {
 //#region Main code
 
 Vue.createApp({
+  // delimiters are set only for this component (index.html is go template). Each component has it own delimiters.
   delimiters: ['[[', ']]'],
   components: {
+    ComponentMessage: ComponentMessage,
     ComponentMain: ComponentMain,
     ComponentAuth: ComponentAuth
   },
@@ -69,7 +89,9 @@ Vue.createApp({
   },
   data() {
     return {
-      session: mtAuth // take initial value from global variable provided in index.html
+      // take initial value from global variable provided in index.html
+      session: mtAuth,
+      message: { body: "", kind: "primary" }
     }
   }
 }).mount('#app')
