@@ -5,92 +5,109 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/gorilla/sessions"
 )
 
 const sessionName = "mtsession"
 
-var API struct {
-	SessionStore *sessions.CookieStore
-}
+var apiSessionStore *sessions.CookieStore
 
 func init() {
-	API.SessionStore = sessions.NewCookieStore([]byte("mt-tgadmin super secret key"))
+	apiSessionStore = sessions.NewCookieStore([]byte("mt-tgadmin super secret key"))
 }
 
-func apiSetReply(w http.ResponseWriter, data map[string]interface{}) {
+func WebApiRequestHandler(w http.ResponseWriter, r *http.Request) {
+	path := strings.TrimPrefix(r.URL.Path, "/api")
+	//log.Println(path)
+
+	api_request, err := NewApiRequest(&w, r)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	//run request handler
+	api_request.Run(path)
+
+	//prepare reply
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	json.NewEncoder(w).Encode(data)
+	json.NewEncoder(w).Encode(api_request.outData)
 }
 
-func apiCheckSession(w http.ResponseWriter, r *http.Request) bool {
-	session, _ := API.SessionStore.Get(r, sessionName)
+// region API object
+type apiRequest struct {
+	inData  map[string]interface{}
+	outData map[string]interface{}
+	session *sessions.Session
 
-	if auth, ok := session.Values["auth"].(bool); !ok || !auth {
-		http.Error(w, "Auth Required", http.StatusForbidden)
+	responseWriter *http.ResponseWriter
+	request        *http.Request
+}
+
+func NewApiRequest(responseWriter *http.ResponseWriter, request *http.Request) (*apiRequest, error) {
+	r := &apiRequest{
+		inData:         make(map[string]interface{}),
+		outData:        make(map[string]interface{}),
+		responseWriter: responseWriter,
+		request:        request,
+	}
+
+	//prepare session
+	r.session, _ = apiSessionStore.Get(request, sessionName)
+
+	//prepare input data
+	body, err := io.ReadAll(io.LimitReader(r.request.Body, 1048576))
+	if err != nil {
+		return nil, err
+	}
+	//log.Println(string(body))
+
+	if json.Valid(body) {
+		if err := json.Unmarshal(body, &r.outData); err != nil {
+			return nil, err
+		}
+	}
+	//log.Println(r.outData)
+
+	return r, nil
+}
+
+func (r *apiRequest) getInData(name string) string {
+	if value, ok := r.outData[name]; ok {
+		return value.(string)
+	} else {
+		return ""
+	}
+}
+
+func (r *apiRequest) getOutData(name string) string {
+	if value, ok := r.outData[name]; ok {
+		return value.(string)
+	} else {
+		return ""
+	}
+}
+
+func (r *apiRequest) setOutData(name, value string) {
+	r.outData[name] = value
+}
+
+func (r *apiRequest) setStatus(status, message string) {
+	r.setOutData("status", status)
+	r.setOutData("message", message)
+}
+
+func (r *apiRequest) apiCheckSession() bool {
+	if auth, ok := r.session.Values["auth"].(bool); !ok || !auth {
+		r.setStatus("danger", "Auth Required")
+		http.Error(*r.responseWriter, "Auth Required", http.StatusForbidden)
 		return false
 	} else {
 		return true
 	}
 }
 
-func ApiHealthCheck(w http.ResponseWriter, r *http.Request) {
-	session, _ := API.SessionStore.Get(r, sessionName)
-
-	apiSetReply(w, map[string]interface{}{
-		"status":  "OK",
-		"message": "API working",
-		"auth":    session.Values["auth"],
-	})
-}
-
-func ApiPassword(w http.ResponseWriter, r *http.Request) {
-	body, err := io.ReadAll(io.LimitReader(r.Body, 1048576))
-	if err != nil {
-		log.Println(err)
-	}
-
-	var data map[string]interface{}
-	if err := json.Unmarshal(body, &data); err != nil {
-		panic(err)
-	}
-	//log.Println(data)
-
-	var status string
-	var message string
-
-	if data["password"].(string) == Global.Settings.GuiPassword {
-		status = "OK"
-
-		session, _ := API.SessionStore.Get(r, sessionName)
-
-		// Set user as authenticated
-		session.Values["auth"] = true
-		session.Options.MaxAge = 86400
-		session.Save(r, w)
-
-		message = "You are authorized!"
-	} else {
-		status = "danger"
-		message = "Wrong password"
-	}
-
-	apiSetReply(w, map[string]interface{}{
-		"status":  status,
-		"message": message,
-	})
-}
-
-func ApiLogout(w http.ResponseWriter, r *http.Request) {
-	if !apiCheckSession(w, r) {
-		return
-	}
-
-	session, _ := API.SessionStore.Get(r, sessionName)
-	session.Values["auth"] = false
-	session.Options.MaxAge = 0
-	session.Save(r, w)
-
-	apiSetReply(w, map[string]interface{}{"status": "info", "message": "Good bye!"})
-}
+//endregion

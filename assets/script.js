@@ -43,7 +43,7 @@ let ComponentAuth = {
       ApiRequest('password', data, this, function (response) {
         //console.log(response);
 
-        if(response.status == "OK")
+        if(response.status == "ok")
         {
           MtData.session = true; //adjust GUI
         }
@@ -109,12 +109,12 @@ function ApiRequest(path, data, component, responseHandler)
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data ?? {})
     }
   )
     .then(response => response.json())
     .then(function(response){
-      if(response.status == "OK")
+      if(response.status == "ok")
       {
         MtData.message.kind = "success";
       }

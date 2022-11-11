@@ -16,11 +16,7 @@ func BuildWebRouter() *mux.Router {
 	router := mux.NewRouter()
 
 	//API
-	subrouter := router.PathPrefix("/api").Subrouter()
-	subrouter.HandleFunc("/password", ApiPassword)
-	subrouter.HandleFunc("/logout", ApiLogout)
-
-	router.HandleFunc("/api", ApiHealthCheck)
+	router.PathPrefix("/api").HandlerFunc(WebApiRequestHandler)
 
 	//serve assets
 	router.PathPrefix("/assets").Handler(http.FileServer(http.FS(WebAssets))).Methods("GET")
@@ -31,8 +27,13 @@ func BuildWebRouter() *mux.Router {
 	return router
 }
 
+type indexData struct {
+	Global interface{}
+	Auth   bool
+}
+
 func WebIndex(w http.ResponseWriter, r *http.Request) {
-	session, _ := API.SessionStore.Get(r, sessionName)
+	session, _ := apiSessionStore.Get(r, sessionName)
 
 	t := template.New("index")
 	if _, err := t.Parse(*WebIndexHtml); err != nil {
@@ -47,9 +48,4 @@ func WebIndex(w http.ResponseWriter, r *http.Request) {
 	if err := t.Execute(w, data); err != nil {
 		log.Fatalln(err)
 	}
-}
-
-type indexData struct {
-	Global interface{}
-	Auth   bool
 }
