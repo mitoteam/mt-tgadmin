@@ -58,7 +58,7 @@ let ComponentAuth = {
   template: `
 <div class="mb-3">
   <label for="password" class="form-label">Password please</label>
-  <input type="password" class="form-control" id="password">
+  <input type="password" class="form-control" id="password" @keyup.enter="password();">
 </div>
 <a class="btn btn-success" @click="password();">Authorize</a>
 `
