@@ -45,14 +45,11 @@ let ComponentAuth = {
 
         if(response.status == "OK")
         {
-          this.$parent.session = true; //adjust GUI
-          this.$parent.message.body = "";
+          MtData.session = true; //adjust GUI
         }
         else
         {
           //alert(response.message);
-          this.$parent.message.body = response.message;
-          this.$parent.message.kind = 'danger';
           document.getElementById('password').value = '';
         }
       });
@@ -70,6 +67,12 @@ let ComponentAuth = {
 
 //#region Main code
 
+var MtData = {
+  // take initial value from global variable provided in index.html
+  session: mtAuth,
+  message: { body: "", kind: "primary" }
+}
+
 Vue.createApp({
   // delimiters are set only for this component (index.html is go template). Each component has it own delimiters.
   delimiters: ['[[', ']]'],
@@ -82,17 +85,14 @@ Vue.createApp({
     logout: function () {
       //alert('logout');
       ApiRequest('logout', null, this, function (response) {
-        console.log(response);
-        this.session = false; //adjust GUI
+        //console.log(response);
+        MtData.session = false; //adjust GUI
       });
     }
   },
   data() {
-    return {
-      // take initial value from global variable provided in index.html
-      session: mtAuth,
-      message: { body: "", kind: "primary" }
-    }
+    MtData = Vue.reactive(MtData);
+    return MtData;
   }
 }).mount('#app')
 
@@ -113,6 +113,19 @@ function ApiRequest(path, data, component, responseHandler)
     }
   )
     .then(response => response.json())
-    .then(response => responseHandler.call(component, response));
+    .then(function(response){
+      if(response.status == "OK")
+      {
+        MtData.message.kind = "success";
+      }
+      else
+      {
+        MtData.message.kind = response.status;
+      }
+
+      MtData.message.body = response.message ?? "";
+
+      responseHandler.call(component, response);
+    });
 }
 //#endregion

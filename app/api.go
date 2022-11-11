@@ -69,8 +69,10 @@ func ApiPassword(w http.ResponseWriter, r *http.Request) {
 		session.Values["auth"] = true
 		session.Options.MaxAge = 86400
 		session.Save(r, w)
+
+		message = "You are authorized!"
 	} else {
-		status = "Error"
+		status = "danger"
 		message = "Wrong password"
 	}
 
@@ -90,5 +92,5 @@ func ApiLogout(w http.ResponseWriter, r *http.Request) {
 	session.Options.MaxAge = 0
 	session.Save(r, w)
 
-	apiSetReply(w, map[string]interface{}{"status": "OK"})
+	apiSetReply(w, map[string]interface{}{"status": "info", "message": "Good bye!"})
 }
