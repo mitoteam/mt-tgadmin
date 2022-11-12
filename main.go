@@ -9,7 +9,7 @@ import (
 
 // embedded web assets
 //
-//go:embed assets/*.min.js assets/*.css
+//go:embed assets/*.min.js assets/*.css assets/favicon.ico
 var webAssets embed.FS
 
 //go:embed assets/index.html
