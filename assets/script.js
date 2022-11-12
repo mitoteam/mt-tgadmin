@@ -50,13 +50,28 @@ let ComponentMain = {
 
     say: function () {
       let data = {
-        message: document.getElementById('messageEditor').value,
+        message: document.getElementById('messageEditor')?.value,
         reply_to: this.reply?.message_id,
+        silent: document.getElementById('silentCheck')?.checked ? 1 : 0,
       }
 
       //console.log(data); return;
 
-      ApiRequest('say', data, this);
+      if(data.message)
+      {
+        ApiRequest('say', data, this);
+
+        document.getElementById('messageEditor').value = "";
+
+        MtData.status.kind = "info";
+        MtData.status.body = "";
+      }
+      else
+      {
+        //console.log('Empty set!');
+        MtData.status.kind = 'warning';
+        MtData.status.body = 'Empty message!';
+      }
     },
 
     list_messages: function () {
@@ -102,6 +117,12 @@ let ComponentMain = {
 
     <h5 class="card-title">Say:</h5>
     <textarea class="form-control" id="messageEditor" rows="10" placeholder="Message text"></textarea>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="silentCheck">
+      <label class="form-check-label" for="silentCheck">
+        Silent Message
+      </label>
+    </div>
     <a class="btn btn-success mt-3" @click="say()">Say</a>
   </div>
 </div>

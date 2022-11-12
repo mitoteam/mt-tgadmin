@@ -80,10 +80,13 @@ func (r *apiRequest) Say() {
 		msg.ReplyToMessageID = reply_to
 	}
 
+	if r.getInDataInt("silent", 0) != 0 {
+		msg.DisableNotification = true
+	}
+
 	tgBot.Send(msg)
 
-	log.Println("Said:", text)
-	log.Println("In Reply to:", reply_to)
+	//log.Println("Said:", text) log.Println("In Reply to:", reply_to)
 }
 
 func (r *apiRequest) ListMessages() {
