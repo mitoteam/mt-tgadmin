@@ -98,7 +98,7 @@ let ComponentMain = {
   <div class="card-body">
     <div class="d-flex justify-content-between">
       <div>
-        <a class="btn btn-primary" @click="list_messages();">Update Messages</a>
+        <a class="btn btn-primary" @click="list_messages();">Get Latest Messages</a>
       </div>
       <div>
         <a class="btn btn-secondary" @click="logout();">Logout</a>
