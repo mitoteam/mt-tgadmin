@@ -67,6 +67,7 @@ let ComponentMain = {
         ApiRequest('say', data, this);
 
         this.editorData = "";
+        this.reply = null;
 
         MtData.status.kind = "info";
         MtData.status.body = "";
@@ -106,17 +107,10 @@ let ComponentMain = {
   </div>
 </div>
 
-<div id="messages" class="card mb-3" v-if="messages.length > 0">
-  <div class="card-body">
-    <h5 class="card-title">Messages from chat</h5>
-    <component-message v-bind:m="m" v-for="m in messages" :key="m.message_id" v-bind:replymode="false"></component-message>
-  </div>
-</div>
-
 <div id="send" class="card">
   <div class="card-body">
     <div v-if="reply" class="mb-3">
-      <h5 class="card-title">Ini Reply to:</h5>
+      <h5 class="card-title">In Reply to:</h5>
       <component-message v-bind:m="reply" v-bind:replymode="true"></component-message>
     </div>
 
@@ -129,6 +123,13 @@ let ComponentMain = {
       </label>
     </div>
     <a class="btn btn-success mt-3" @click="say()">Say</a>
+  </div>
+</div>
+
+<div id="messages" class="card mt-3" v-if="messages.length > 0">
+  <div class="card-body">
+    <h5 class="card-title">Latest messages from chat</h5>
+    <component-message v-bind:m="m" v-for="m in messages" :key="m.message_id" v-bind:replymode="false"></component-message>
   </div>
 </div>
 `
