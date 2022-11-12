@@ -129,7 +129,7 @@ func (r *apiRequest) getOutData(name string) string {
 	}
 }
 
-func (r *apiRequest) setOutData(name, value string) {
+func (r *apiRequest) setOutData(name string, value interface{}) {
 	r.outData[name] = value
 }
 
@@ -140,12 +140,16 @@ func (r *apiRequest) setStatus(status, message string) {
 
 func (r *apiRequest) apiCheckSession() bool {
 	if auth, ok := r.session.Values["auth"].(bool); !ok || !auth {
-		r.setStatus("danger", "Auth Required")
-		http.Error(*r.responseWriter, "Auth Required", http.StatusForbidden)
+		r.setError("Auth Required")
 		return false
 	} else {
 		return true
 	}
+}
+
+func (r *apiRequest) setError(message string) {
+	r.setStatus("danger", message)
+	http.Error(*r.responseWriter, message, http.StatusInternalServerError)
 }
 
 //endregion

@@ -1,10 +1,31 @@
 //#region Components
 
+let ComponentMessage = {
+  props: ["m"],
+
+  template: `
+<div class="card">
+  <div class="card-header">
+    <div class="d-flex justify-content-between">
+      <div class="fw-bold">{{m.user}}</div>
+      <div>{{m.date}}</div>
+    </div>
+  </div>
+  <div class="card-body">
+    {{m.message}}
+  </div>
+</div>`
+}
+
 let ComponentMain = {
   data() {
     return {
-      message: ""
+      messages: [],
     }
+  },
+
+  components: {
+    ComponentMessage: ComponentMessage,
   },
 
   methods: {
@@ -23,12 +44,17 @@ let ComponentMain = {
 
       //console.log(data); return;
 
-      ApiRequest('say', data, this, function (response) {
+      ApiRequest('say', data, this);
+    },
+
+    list_messages: function () {
+      ApiRequest('list_messages', null, this, function (response) {
         //console.log(response);
 
         if(response.status == "ok")
         {
-
+          console.log(response.list);
+          this.messages = response.list;
         }
       });
     },
@@ -39,7 +65,7 @@ let ComponentMain = {
   <div class="card-body">
     <div class="d-flex justify-content-between">
       <div>
-        no actions yet
+        <a class="btn btn-primary" @click="list_messages();">Update Messages</a>
       </div>
       <div>
         <a class="btn btn-secondary" @click="logout();">Logout</a>
@@ -48,15 +74,24 @@ let ComponentMain = {
   </div>
 </div>
 
-<div>
-  <label for="messageEditor" class="form-label fw-bold">Message:</label>
-  <textarea class="form-control" id="messageEditor" rows="10" placeholder="Message text"></textarea>
-  <a class="btn btn-success mt-3" @click="say()">Say</a>
+<div id="messages" class="card mb-3" v-if="messages.length > 0">
+  <div class="card-body">
+    <h5 class="card-title">Messages from chat</h5>
+    <component-message v-bind:m="m" v-for="m in messages" :key="m.message_id"></component-message>
+  </div>
+</div>
+
+<div id="messages" class="card">
+  <div class="card-body">
+    <h5 class="card-title">Say:</h5>
+    <textarea class="form-control" id="messageEditor" rows="10" placeholder="Message text"></textarea>
+    <a class="btn btn-success mt-3" @click="say()">Say</a>
+  </div>
 </div>
 `
 }
 
-let ComponentMessage = {
+let ComponentStatus = {
   props: {
     body: String,
     kind: {
@@ -113,7 +148,7 @@ let ComponentAuth = {
 var MtData = {
   // take initial value from global variable provided in index.html
   session: mtAuth,
-  message: { body: "", kind: "primary" },
+  status: { body: "", kind: "primary" },
 }
 
 Vue.createApp({
@@ -121,9 +156,9 @@ Vue.createApp({
   delimiters: ['[[', ']]'],
 
   components: {
-    ComponentMessage: ComponentMessage,
-    ComponentMain: ComponentMain,
-    ComponentAuth: ComponentAuth
+    ComponentStatus: ComponentStatus,
+    ComponentAuth: ComponentAuth,
+    ComponentMain: ComponentMain
   },
 
   data() {
@@ -153,16 +188,19 @@ function ApiRequest(path, data, component, responseHandler)
     .then(function(response){
       if(response.status == "ok")
       {
-        MtData.message.kind = "success";
+        MtData.status.kind = "success";
       }
       else
       {
-        MtData.message.kind = response.status;
+        MtData.status.kind = response.status;
       }
 
-      MtData.message.body = response.message ?? "";
+      MtData.status.body = response.message ?? "";
 
-      responseHandler.call(component, response);
+      if(typeof(responseHandler) == 'function')
+      {
+        responseHandler.call(component, response);
+      }
     });
 }
 //#endregion

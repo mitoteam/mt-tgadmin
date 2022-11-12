@@ -1,12 +1,24 @@
+$spacer: 10px;
+
 #actions
 {
   .btn
   {
-    margin-left: 10px;
+    margin-left: $spacer;
 
     &:first-child
     {
       margin-left: 0;
     }
+  }
+}
+
+.card-body .card
+{
+  margin-top: $spacer;
+
+  &:first-child
+  {
+    margin-top: 0;
   }
 }
