@@ -33,8 +33,11 @@ Copyright: MiTo Team, https://mito-team.com`,
 
 			//mttools.PrintYamlSettings(app.Global.Settings)
 		} else {
-			if cmd.Name() != "init" {
-				log.Fatalln("No bot settings file found. Please create one or use `" + app.Global.AppName + " init` command.")
+			if cmd.Name() != "init" && cmd.Name() != "version" {
+				log.Fatalln(
+					"No " + app.DefaultSettingsFilename + " file found. Please create one or use `" +
+						app.Global.AppName + " init` command.",
+				)
 			}
 		}
 
