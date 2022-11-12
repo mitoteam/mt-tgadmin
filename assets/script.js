@@ -1,14 +1,18 @@
 //#region Components
 
 let ComponentMessage = {
-  props: ["m"],
+  props: ["m", "replymode"],
 
   template: `
 <div class="card">
   <div class="card-header">
     <div class="d-flex justify-content-between">
-      <div class="fw-bold">{{m.user}}</div>
-      <div>{{m.date}}</div>
+      <div>
+        <span class="fw-bold">{{m.user}}</span><span class="small text-muted ms-3">{{m.date}}</span>
+      </div>
+      <div>
+        <a :class="['btn-' + (replymode ? 'warning' : 'primary')]" class="btn btn-sm" @click="$parent.set_reply_message(replymode ? null : m);" v-text="replymode ? 'Unset' : 'Reply'"></a>
+      </div>
     </div>
   </div>
   <div class="card-body">
@@ -21,6 +25,7 @@ let ComponentMain = {
   data() {
     return {
       messages: [],
+      reply: null,
     }
   },
 
@@ -29,6 +34,12 @@ let ComponentMain = {
   },
 
   methods: {
+    set_reply_message: function (message) {
+      //alert('set_reply_message'); console.log(message);
+
+      this.reply = message;
+    },
+
     logout: function () {
       //alert('logout');
       ApiRequest('logout', null, this, function (response) {
@@ -40,6 +51,7 @@ let ComponentMain = {
     say: function () {
       let data = {
         message: document.getElementById('messageEditor').value,
+        reply_to: this.reply?.message_id,
       }
 
       //console.log(data); return;
@@ -53,7 +65,7 @@ let ComponentMain = {
 
         if(response.status == "ok")
         {
-          console.log(response.list);
+          //console.log(response.list);
           this.messages = response.list;
         }
       });
@@ -77,12 +89,17 @@ let ComponentMain = {
 <div id="messages" class="card mb-3" v-if="messages.length > 0">
   <div class="card-body">
     <h5 class="card-title">Messages from chat</h5>
-    <component-message v-bind:m="m" v-for="m in messages" :key="m.message_id"></component-message>
+    <component-message v-bind:m="m" v-for="m in messages" :key="m.message_id" v-bind:replymode="false"></component-message>
   </div>
 </div>
 
-<div id="messages" class="card">
+<div id="send" class="card">
   <div class="card-body">
+    <div v-if="reply" class="mb-3">
+      <h5 class="card-title">Ini Reply to:</h5>
+      <component-message v-bind:m="reply" v-bind:replymode="true"></component-message>
+    </div>
+
     <h5 class="card-title">Say:</h5>
     <textarea class="form-control" id="messageEditor" rows="10" placeholder="Message text"></textarea>
     <a class="btn btn-success mt-3" @click="say()">Say</a>
@@ -101,7 +118,7 @@ let ComponentStatus = {
   },
 
   template: `
-<div v-if="body" :class="['mb-3', 'alert', 'alert-' + kind]" role="alert">
+<div v-if="body" class="mb-3 alert" :class="['alert-' + kind]" role="alert">
   {{body}}
 </div>`
 }

@@ -2,6 +2,7 @@ package app
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -115,10 +116,30 @@ func NewApiRequest(responseWriter *http.ResponseWriter, request *http.Request) (
 
 func (r *apiRequest) getInData(name string) string {
 	if value, ok := r.inData[name]; ok {
-		return value.(string)
+		if _, ok := value.(string); ok {
+			return value.(string)
+		} else {
+			return fmt.Sprintf("%v", value)
+		}
 	} else {
 		return ""
 	}
+}
+
+func (r *apiRequest) getInDataInt(name string, default_value int) int {
+	if value, ok := r.inData[name]; ok {
+		//log.Println(reflect.TypeOf(value))
+
+		if _, ok := value.(int); ok {
+			return value.(int)
+		}
+
+		if _, ok := value.(float64); ok {
+			return int(value.(float64))
+		}
+	}
+
+	return default_value
 }
 
 func (r *apiRequest) getOutData(name string) string {
