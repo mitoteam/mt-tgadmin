@@ -76,7 +76,7 @@ func WebApiRequestHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(api_request.outData)
 }
 
-// region API object
+// #region API object
 type apiRequest struct {
 	inData  map[string]interface{}
 	outData map[string]interface{}
@@ -173,4 +173,16 @@ func (r *apiRequest) setError(message string) {
 	http.Error(*r.responseWriter, message, http.StatusInternalServerError)
 }
 
-//endregion
+//#endregion
+
+// See https://core.telegram.org/bots/api#formatting-options
+func PrepareTelegramHtml(input string) (r string) {
+	r = input
+
+	r = strings.ReplaceAll(r, "<p>", "")
+	r = strings.ReplaceAll(r, "</p>", "\n")
+
+	r = strings.TrimSpace(r)
+
+	return r
+}

@@ -69,14 +69,11 @@ func (r *apiRequest) Logout() {
 
 func (r *apiRequest) Say() {
 	text := r.getInData("message")
-	reply_to := r.getInDataInt("reply_to", 0)
-
-	//text = tgbotapi.EscapeText("MarkdownV2", text)
-
+	text = PrepareTelegramHtml(text)
 	msg := tgbotapi.NewMessage(Global.Settings.BotChatID, text)
-	//msg.ParseMode = "MarkdownV2"
+	msg.ParseMode = "HTML"
 
-	if reply_to > 0 {
+	if reply_to := r.getInDataInt("reply_to", 0); reply_to > 0 {
 		msg.ReplyToMessageID = reply_to
 	}
 
@@ -86,7 +83,7 @@ func (r *apiRequest) Say() {
 
 	tgBot.Send(msg)
 
-	//log.Println("Said:", text) log.Println("In Reply to:", reply_to)
+	//log.Println("Said:", text)
 }
 
 func (r *apiRequest) ListMessages() {

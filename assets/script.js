@@ -26,6 +26,11 @@ let ComponentMain = {
     return {
       messages: [],
       reply: null,
+
+      //https://ckeditor.com/ckeditor-5/online-builder/
+      editor: ClassicEditor,
+		  editorData: '',
+		  editorConfig: {},
     }
   },
 
@@ -50,7 +55,7 @@ let ComponentMain = {
 
     say: function () {
       let data = {
-        message: document.getElementById('messageEditor')?.value,
+        message: this.editorData,
         reply_to: this.reply?.message_id,
         silent: document.getElementById('silentCheck')?.checked ? 1 : 0,
       }
@@ -61,7 +66,7 @@ let ComponentMain = {
       {
         ApiRequest('say', data, this);
 
-        document.getElementById('messageEditor').value = "";
+        this.editorData = "";
 
         MtData.status.kind = "info";
         MtData.status.body = "";
@@ -116,7 +121,7 @@ let ComponentMain = {
     </div>
 
     <h5 class="card-title">Say:</h5>
-    <textarea class="form-control" id="messageEditor" rows="10" placeholder="Message text"></textarea>
+    <ckeditor :editor="editor" v-model="editorData" :config="editorConfig" id="messageEditor"></ckeditor>
     <div class="form-check">
       <input class="form-check-input" type="checkbox" value="" id="silentCheck">
       <label class="form-check-label" for="silentCheck">
@@ -204,6 +209,7 @@ Vue.createApp({
     return MtData;
   }
 })
+.use( CKEditor )
 .mount('#app')
 
 //#endregion
