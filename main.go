@@ -3,8 +3,9 @@ package main
 import (
 	"embed"
 	"log"
-	"mt-tgadmin/app"
-	"mt-tgadmin/cmd"
+
+	"github.com/mitoteam/mt-tgadmin/app"
+	"github.com/mitoteam/mt-tgadmin/cmd"
 )
 
 // embedded web assets

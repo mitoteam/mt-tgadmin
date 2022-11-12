@@ -3,13 +3,13 @@ package cmd
 import (
 	"context"
 	"log"
-	"mt-tgadmin/app"
 	"net/http"
 	"os"
 	"os/signal"
 	"strconv"
 	"time"
 
+	"github.com/mitoteam/mt-tgadmin/app"
 	"github.com/spf13/cobra"
 )
 

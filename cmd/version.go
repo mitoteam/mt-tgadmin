@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"mt-tgadmin/app"
 
+	"github.com/mitoteam/mt-tgadmin/app"
 	"github.com/spf13/cobra"
 )
 

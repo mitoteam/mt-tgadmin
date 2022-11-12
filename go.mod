@@ -1,4 +1,4 @@
-module mt-tgadmin
+module github.com/mitoteam/mt-tgadmin
 
 go 1.19
 

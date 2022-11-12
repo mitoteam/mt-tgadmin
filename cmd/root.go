@@ -4,9 +4,9 @@ package cmd
 
 import (
 	"log"
-	"mt-tgadmin/app"
-	"mt-tgadmin/mttools"
 
+	"github.com/mitoteam/mt-tgadmin/app"
+	"github.com/mitoteam/mt-tgadmin/mttools"
 	"github.com/spf13/cobra"
 )
 
