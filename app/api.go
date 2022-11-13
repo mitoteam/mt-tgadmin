@@ -179,6 +179,8 @@ func (r *apiRequest) setError(message string) {
 func PrepareTelegramHtml(input string) (r string) {
 	r = input
 
+	r = strings.ReplaceAll(r, "&nbsp;", " ")
+
 	r = strings.ReplaceAll(r, "<p>", "")
 	r = strings.ReplaceAll(r, "</p>", "\n")
 
