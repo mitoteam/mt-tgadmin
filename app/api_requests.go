@@ -90,7 +90,7 @@ func (r *apiRequest) ListMessages() {
 	updates_config := tgbotapi.NewUpdate(0)
 	updates_config.Timeout = 1
 	updates_config.Limit = 20
-	//updates_config.Offset = -1
+	//updates_config.Offset = 0
 	updates_config.AllowedUpdates = []string{"message"}
 
 	updates_list, err := tgBot.GetUpdates(updates_config)

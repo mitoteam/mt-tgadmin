@@ -88,6 +88,12 @@ let ComponentMain = {
         {
           //console.log(response.list);
           this.messages = response.list;
+
+          if(response.list.length == 0)
+          {
+            MtData.status.kind = "info";
+            MtData.status.body = "Empty messages list received (" + (new Date()).toLocaleString() + ").";
+          }
         }
       });
     },
