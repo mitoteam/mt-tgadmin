@@ -89,8 +89,8 @@ func (r *apiRequest) Say() {
 func (r *apiRequest) ListMessages() {
 	updates_config := tgbotapi.NewUpdate(0)
 	updates_config.Timeout = 1
-	updates_config.Limit = 20
-	//updates_config.Offset = 0
+	updates_config.Limit = 100
+	updates_config.Offset = -100
 	updates_config.AllowedUpdates = []string{"message"}
 
 	updates_list, err := tgBot.GetUpdates(updates_config)
@@ -101,7 +101,8 @@ func (r *apiRequest) ListMessages() {
 
 	list := make([]*apiMessage, 0, len(updates_list))
 
-	for i := 0; i < len(updates_list); i++ {
+	//from end to beginning
+	for i := len(updates_list) - 1; i >= 0; i-- {
 		update := updates_list[i]
 
 		m := &apiMessage{}
