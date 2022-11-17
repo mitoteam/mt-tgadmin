@@ -181,6 +181,7 @@ func PrepareTelegramHtml(input string) (r string) {
 
 	r = strings.ReplaceAll(r, "&nbsp;", " ")
 
+	r = strings.ReplaceAll(r, "<br>", "\n")
 	r = strings.ReplaceAll(r, "<p>", "")
 	r = strings.ReplaceAll(r, "</p>", "\n")
 
