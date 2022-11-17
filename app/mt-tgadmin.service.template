@@ -1,0 +1,17 @@
+[Unit]
+Description={{ .Name }}
+After=network.target
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+[Service]
+RestartSec=2s
+Type=simple
+User={{ .User }}
+Group={{ .Group }}
+WorkingDirectory={{ .WorkingDir }}
+ExecStart={{ .Executable }} run
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

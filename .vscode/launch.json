@@ -7,7 +7,7 @@
             "type": "go",
             "request": "launch",
             "program": "main.go",
-            "args": ["info"]
+            "args": ["install"]
         }
     ]
 }

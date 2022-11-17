@@ -2,6 +2,7 @@
 package app
 
 import (
+	_ "embed"
 	"runtime"
 )
 
@@ -9,6 +10,9 @@ var BuildVersion = "DEV"
 var BuildCommit = "DEV"
 
 const DefaultSettingsFilename = ".bot.yml"
+
+//go:embed mt-tgadmin.service.template
+var ServiceUnitFileTemplate string
 
 var Global struct {
 	AppName   string
@@ -21,6 +25,8 @@ var Global struct {
 
 	BotInfo  string
 	ChatInfo string
+
+	ServiceAutostart bool
 }
 
 func init() {
@@ -35,6 +41,10 @@ func init() {
 	Global.Settings.GuiPassword = "mitoteam"
 	Global.Settings.GuiHostname = "localhost"
 	Global.Settings.GuiPort = 15080
+
+	Global.Settings.ServiceName = Global.AppName
+	Global.Settings.ServiceUser = "www-data"
+	Global.Settings.ServiceGroup = "www-data"
 
 	Global.BotInfo = "[undefined]"
 	Global.ChatInfo = "[undefined]"
