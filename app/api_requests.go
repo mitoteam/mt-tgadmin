@@ -105,6 +105,10 @@ func (r *apiRequest) ListMessages() {
 	for i := len(updates_list) - 1; i >= 0; i-- {
 		update := updates_list[i]
 
+		if update.Message.Chat.ID != Global.Settings.BotChatID {
+			continue
+		}
+
 		m := &apiMessage{}
 		m.Message = update.Message.Text
 		m.MessageId = update.Message.MessageID
