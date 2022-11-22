@@ -2,7 +2,6 @@
 package app
 
 import (
-	_ "embed"
 	"runtime"
 )
 
@@ -10,9 +9,6 @@ var BuildVersion = "DEV"
 var BuildCommit = "DEV"
 
 const DefaultSettingsFilename = ".bot.yml"
-
-//go:embed mt-tgadmin.service.template
-var ServiceUnitFileTemplate string
 
 var Global struct {
 	AppName   string
