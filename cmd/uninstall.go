@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/mitoteam/mt-tgadmin/app"
-	"github.com/mitoteam/mt-tgadmin/mttools"
+	"github.com/mitoteam/mttools"
 
 	"github.com/spf13/cobra"
 )
