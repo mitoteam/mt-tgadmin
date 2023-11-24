@@ -106,6 +106,7 @@ func (r *apiRequest) ListMessages() {
 		update := updates_list[i]
 
 		if update.Message.Chat.ID != Global.Settings.BotChatID {
+			//skip messages from other channels or chats
 			continue
 		}
 
