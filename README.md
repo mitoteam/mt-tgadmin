@@ -11,3 +11,21 @@
 [![GitHub downloads](https://img.shields.io/github/downloads/mitoteam/mt-tgadmin/total)](https://github.com/mitoteam/mt-tgadmin/releases)
 
 Telegram bot to send messages to groups, channels and supergroups. Possible to send messages anonymously as admin.
+
+## How To
+
+We try to keep `mt-tgadmin help` accurate.
+
+Before setting up `mt-tgadmin` you need to register your bot with **@BotFather**, add bot to desired group and obtain this group's **chatID**.
+
+* Registering new bot with [@BotFather](https://t.me/botfather): https://core.telegram.org/bots/features#creating-a-new-bot
+* Add created bot to your group.
+* Obtaining group's **chatID**: Open [@RawDataBot](https://t.me/rawdatabot) and follow it instructions.
+
+You will need bot's **token** and **chatID** to setup `mt-tgadmin`:
+
+* Unpack archive for you platform to desired location (there is just one executable file in archive).
+* Run `mt-tgadmin init` to create simple config to start with.
+* Open created file `.bot.yml` with text editor and edit settings. Example settings are in [.bot.EXAMPLE.yml](https://github.com/mitoteam/mt-tgadmin/blob/main/.bot.EXAMPLE.yml).
+* Run `mt-tgadmin run` to check the setup. You should be able to open WebGUI at this point. Press `Ctrl + C` to stop it if everything is OK.
+* Run `mt-tgadmin install` to register it as daemon.
