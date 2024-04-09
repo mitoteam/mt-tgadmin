@@ -1,24 +1,11 @@
 package main
 
 import (
-	"embed"
-
 	"github.com/mitoteam/goappbase"
 	"github.com/mitoteam/mt-tgadmin/app"
 )
 
-// embedded web assets
-//
-//go:embed assets/*.min.js assets/*.css assets/favicon.ico
-var webAssets embed.FS
-
-//go:embed assets/index.html
-var webIndexHtml string
-
 func main() {
-	app.WebAssets = &webAssets
-	app.WebIndexHtml = &webIndexHtml
-
 	app.Settings = &app.AppSettingsType{
 		GuiPassword: "mitoteam",
 	}

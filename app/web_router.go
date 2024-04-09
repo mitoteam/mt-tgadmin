@@ -2,26 +2,37 @@ package app
 
 import (
 	"embed"
-	"log"
+	"html/template"
+	"io/fs"
 	"net/http"
-	"text/template"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/mitoteam/goappbase"
 )
 
-var WebAssets *embed.FS
-var WebIndexHtml *string
+// embedded web assets
+//
+//go:embed assets/*.min.js assets/*.css assets/favicon.ico assets/index.html
+var embedFS embed.FS
+
+var webAssetsFS fs.FS
+
+func init() {
+	//prepare FS for subdirectory "/assets"
+	webAssetsFS, _ = fs.Sub(embedFS, "assets")
+}
 
 func BuildWebRouter(r *gin.Engine) {
 	//API
 	r.POST("/api/*any", WebApiRequestHandler)
 
 	//serve assets
-	r.StaticFS("/assets", http.FS(WebAssets))
+	r.StaticFS("/assets", http.FS(webAssetsFS))
 
-	//serve root index.html
+	//serve HTML from templates (just index.html for now)
+	t := template.Must(template.New("index").ParseFS(webAssetsFS, "index.html"))
+	r.SetHTMLTemplate(t)
 	r.GET("/", WebIndex)
 }
 
@@ -34,18 +45,11 @@ type indexData struct {
 func WebIndex(c *gin.Context) {
 	session := sessions.Default(c)
 
-	t := template.New("index")
-	if _, err := t.Parse(*WebIndexHtml); err != nil {
-		log.Fatalln(err)
-	}
-
 	data := &indexData{
 		Global:  Global,
 		AppInfo: App,
 		Auth:    session.Get("auth") == true,
 	}
 
-	if err := t.Execute(c.Writer, data); err != nil {
-		log.Fatalln(err)
-	}
+	c.HTML(http.StatusOK, "index.html", data)
 }
