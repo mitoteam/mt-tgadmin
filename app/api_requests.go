@@ -49,17 +49,17 @@ func (r *apiRequest) HealthCheck() {
 
 func (r *apiRequest) Password() {
 	if r.getInData("password") == Settings.GuiPassword {
-		r.setStatus("ok", "You are authorized!")
-
 		// Set user as authenticated
-		r.session.Clear()
 		r.session.Set("auth", true)
 
 		r.session.Options(sessions.Options{
 			MaxAge: 24 * 3600,
+			Path:   "/",
 		})
 
 		r.session.Save()
+
+		r.setStatus("ok", "You are authorized!")
 	} else {
 		r.setStatus("danger", "Wrong password")
 	}
@@ -67,11 +67,13 @@ func (r *apiRequest) Password() {
 
 func (r *apiRequest) Logout() {
 	r.session.Clear()
-	r.session.Save()
 
 	r.session.Options(sessions.Options{
-		MaxAge: 0,
+		MaxAge: -1, //remove
+		Path:   "/",
 	})
+
+	r.session.Save()
 
 	r.setStatus("info", "Good bye!")
 }
