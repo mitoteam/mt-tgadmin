@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>{{.Global.AppName}}</title>
+    <title>{{.AppInfo.AppName}}</title>
     <link rel="icon" href="/assets/favicon.ico">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link href="/assets/style.css" rel="stylesheet" />
@@ -13,8 +13,8 @@
     </script>
 
     <div class="container border m-5 p-3 bg-light">
-      <h1>{{.Global.AppName}}</h1>
-      <p class="small text-muted">v.{{.Global.Version}}, commit {{.Global.Commit}}, built with {{.Global.BuiltWith}}</p>
+      <h1>{{.AppInfo.AppName}}</h1>
+      <p class="small text-muted">v.{{.AppInfo.Version}}, commit {{.AppInfo.BuildCommit}}, built with {{.AppInfo.BuildWith}} at {{.AppInfo.BuildTime}}</p>
       <p>
         <b>Bot</b>: {{.Global.BotInfo}}<br>
         <b>Chat</b>: {{.Global.ChatInfo}}

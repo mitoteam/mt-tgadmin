@@ -2,69 +2,61 @@ package app
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"strings"
 
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"github.com/gorilla/sessions"
 )
 
-const sessionName = "mtsession"
-
-var apiSessionStore *sessions.CookieStore
 var tgBot *tgbotapi.BotAPI
 
-func InitApi() bool {
-	if len(Global.Settings.GuiCookieSecretKey) < 32 {
-		log.Println("gui_cookie_secret_key should be at least 32 characters long")
-		return false
+func InitApi() error {
+	if len(Settings.GuiCookieSecretKey) < 32 {
+		return errors.New("gui_cookie_secret_key should be at least 32 characters long")
 	}
 
-	apiSessionStore = sessions.NewCookieStore([]byte(Global.Settings.GuiCookieSecretKey))
-
-	if len(Global.Settings.BotToken) == 0 {
-		log.Println("bot_token required")
-		return false
+	if len(Settings.BotToken) == 0 {
+		return errors.New("bot_token required")
 	}
 
 	var err error
-	tgBot, err = tgbotapi.NewBotAPI(Global.Settings.BotToken)
+	tgBot, err = tgbotapi.NewBotAPI(Settings.BotToken)
 	if err != nil {
-		log.Println(err)
-		return false
+		return err
 	}
 
 	Global.BotInfo = tgBot.Self.FirstName + " " + tgBot.Self.LastName + " (@" + tgBot.Self.UserName + ")"
 	log.Printf("Authorized on telegram bot: %s\n", Global.BotInfo)
 
-	if Global.Settings.BotChatID == 0 {
-		log.Println("bot_chat_id required")
-		return false
+	if Settings.BotChatID == 0 {
+		return errors.New("bot_chat_id required")
 	}
 
-	chat, err := tgBot.GetChat(tgbotapi.ChatInfoConfig{ChatConfig: tgbotapi.ChatConfig{ChatID: Global.Settings.BotChatID}})
+	chat, err := tgBot.GetChat(tgbotapi.ChatInfoConfig{ChatConfig: tgbotapi.ChatConfig{ChatID: Settings.BotChatID}})
 	if err != nil {
-		log.Println(err)
-		return false
+		return err
 	}
 
 	Global.ChatInfo = chat.Type + " \"" + chat.Title + "\", " + chat.InviteLink
 	log.Printf("Chat info: %s\n", Global.ChatInfo)
 
-	return true
+	return nil
 }
 
-func WebApiRequestHandler(w http.ResponseWriter, r *http.Request) {
-	path := strings.TrimPrefix(r.URL.Path, "/api")
+func WebApiRequestHandler(c *gin.Context) {
+	path := strings.TrimPrefix(c.Request.URL.Path, "/api")
 	//log.Println(path)
 
-	api_request, err := NewApiRequest(&w, r)
+	api_request, err := NewApiRequest(c)
 	if err != nil {
 		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(c.Writer, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
@@ -72,33 +64,31 @@ func WebApiRequestHandler(w http.ResponseWriter, r *http.Request) {
 	api_request.Run(path)
 
 	//prepare reply
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	json.NewEncoder(w).Encode(api_request.outData)
+	c.Writer.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	json.NewEncoder(c.Writer).Encode(api_request.outData)
 }
 
 // #region API object
 type apiRequest struct {
 	inData  map[string]interface{}
 	outData map[string]interface{}
-	session *sessions.Session
+	session sessions.Session
 
-	responseWriter *http.ResponseWriter
-	request        *http.Request
+	context *gin.Context
 }
 
-func NewApiRequest(responseWriter *http.ResponseWriter, request *http.Request) (*apiRequest, error) {
+func NewApiRequest(c *gin.Context) (*apiRequest, error) {
 	r := &apiRequest{
-		inData:         make(map[string]interface{}),
-		outData:        make(map[string]interface{}),
-		responseWriter: responseWriter,
-		request:        request,
+		inData:  make(map[string]interface{}),
+		outData: make(map[string]interface{}),
+		context: c,
 	}
 
 	//prepare session
-	r.session, _ = apiSessionStore.Get(request, sessionName)
+	r.session = sessions.Default(c)
 
 	//prepare input data
-	body, err := io.ReadAll(io.LimitReader(r.request.Body, 1048576))
+	body, err := io.ReadAll(io.LimitReader(c.Request.Body, 1048576))
 	if err != nil {
 		return nil, err
 	}
@@ -160,7 +150,7 @@ func (r *apiRequest) setStatus(status, message string) {
 }
 
 func (r *apiRequest) apiCheckSession() bool {
-	if auth, ok := r.session.Values["auth"].(bool); !ok || !auth {
+	if r.session.Get("auth") == nil {
 		r.setError("Auth Required")
 		return false
 	} else {
@@ -170,7 +160,7 @@ func (r *apiRequest) apiCheckSession() bool {
 
 func (r *apiRequest) setError(message string) {
 	r.setStatus("danger", message)
-	http.Error(*r.responseWriter, message, http.StatusInternalServerError)
+	http.Error(r.context.Writer, message, http.StatusInternalServerError)
 }
 
 //#endregion

@@ -19,28 +19,28 @@ func main() {
 	app.WebAssets = &webAssets
 	app.WebIndexHtml = &webIndexHtml
 
-	settings := &app.AppSettingsType{
+	app.Settings = &app.AppSettingsType{
 		GuiPassword: "mitoteam",
 	}
-	settings.WebserverPort = 15080
+	app.Settings.WebserverPort = 15080
 
-	application := goappbase.NewAppBase(settings)
+	app.App = goappbase.NewAppBase(app.Settings)
 
-	application.AppName = "mt-tgadmin"
-	application.ExecutableName = "mt-tgadmin"
-	application.LongDescription = `simple telegram bot Web GUI based manager to send messages to groups.
+	app.App.AppName = "mt-tgadmin"
+	app.App.ExecutableName = "mt-tgadmin"
+	app.App.LongDescription = `simple telegram bot Web GUI based manager to send messages to groups.
 
 	Copyright: MiTo Team, https://mito-team.com`
 
-	application.AppSettingsFilename = ".bot.yml"
+	app.App.AppSettingsFilename = ".bot.yml"
 
-	application.BuildWebRouterF = app.BuildWebRouter
+	app.App.BuildWebRouterF = app.BuildWebRouter
 
-	application.PreRunF = func() error {
-		err := app.InitApi(application)
+	app.App.PreRunF = func() error {
+		err := app.InitApi()
 
 		return err
 	}
 
-	application.Run()
+	app.App.Run()
 }

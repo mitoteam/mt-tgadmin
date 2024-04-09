@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gin-contrib/sessions"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
@@ -43,26 +44,34 @@ func (r *apiRequest) Run(path string) {
 
 func (r *apiRequest) HealthCheck() {
 	r.setStatus("ok", "API working")
-	r.setOutData("auth", fmt.Sprintf("%t", r.session.Values["auth"]))
+	r.setOutData("auth", fmt.Sprintf("%t", r.session.Get("auth")))
 }
 
 func (r *apiRequest) Password() {
-	if r.getInData("password") == Global.Settings.GuiPassword {
+	if r.getInData("password") == Settings.GuiPassword {
 		r.setStatus("ok", "You are authorized!")
 
 		// Set user as authenticated
-		r.session.Values["auth"] = true
-		r.session.Options.MaxAge = 86400
-		r.session.Save(r.request, *r.responseWriter)
+		r.session.Clear()
+		r.session.Set("auth", true)
+
+		r.session.Options(sessions.Options{
+			MaxAge: 24 * 3600,
+		})
+
+		r.session.Save()
 	} else {
 		r.setStatus("danger", "Wrong password")
 	}
 }
 
 func (r *apiRequest) Logout() {
-	r.session.Values["auth"] = false
-	r.session.Options.MaxAge = 0
-	r.session.Save(r.request, *r.responseWriter)
+	r.session.Clear()
+	r.session.Save()
+
+	r.session.Options(sessions.Options{
+		MaxAge: 0,
+	})
 
 	r.setStatus("info", "Good bye!")
 }
@@ -70,7 +79,7 @@ func (r *apiRequest) Logout() {
 func (r *apiRequest) Say() {
 	text := r.getInData("message")
 	text = PrepareTelegramHtml(text)
-	msg := tgbotapi.NewMessage(Global.Settings.BotChatID, text)
+	msg := tgbotapi.NewMessage(Settings.BotChatID, text)
 	msg.ParseMode = "HTML"
 
 	if reply_to := r.getInDataInt("reply_to", 0); reply_to > 0 {
@@ -105,7 +114,7 @@ func (r *apiRequest) ListMessages() {
 	for i := len(updates_list) - 1; i >= 0; i-- {
 		update := updates_list[i]
 
-		if update.Message.Chat.ID != Global.Settings.BotChatID {
+		if update.Message.Chat.ID != Settings.BotChatID {
 			//skip messages from other channels or chats
 			continue
 		}

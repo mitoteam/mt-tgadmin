@@ -1,10 +1,17 @@
 // Package app contains main mt-tgadmin functionality.
 package app
 
-var Global struct {
-	BotInfo  string
-	ChatInfo string
-}
+import "github.com/mitoteam/goappbase"
+
+var (
+	Global struct {
+		BotInfo  string
+		ChatInfo string
+	}
+
+	App      *goappbase.AppBase
+	Settings *AppSettingsType
+)
 
 func init() {
 	//defaults
