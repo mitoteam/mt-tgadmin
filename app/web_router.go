@@ -10,14 +10,11 @@ import (
 )
 
 func BuildWebRouter(r *gin.Engine) {
-	//API
-	r.POST("/api/*any", WebApiRequestHandler)
-
 	//serve assets
 	r.StaticFS("/assets", http.FS(webAssetsFS))
 
 	//serve HTML from templates (just index.html for now)
-	t := template.Must(template.New("index").ParseFS(templatesFS, "index.html"))
+	t := template.Must(template.New("").ParseFS(templatesFS, "index.html"))
 	r.SetHTMLTemplate(t)
 	r.GET("/", WebIndex)
 }
@@ -25,9 +22,21 @@ func BuildWebRouter(r *gin.Engine) {
 func WebIndex(c *gin.Context) {
 	session := sessions.Default(c)
 
-	//c.HTML(http.StatusOK, "index.html", data)
 	c.HTML(http.StatusOK, "index.html", gin.H{
 		"AppInfo": App,
 		"Auth":    session.Get("auth") == true,
 	})
+}
+
+// builds API routing and handlers for goappbase
+func BuildWebApiRouting(app *goappbase.AppBase) {
+	app.WebApiPathPrefix = "/api"
+	app.WebApiEnableGet = true
+
+	app.
+		ApiHandler("/ping", Api_HealthCheck).
+		ApiHandler("/password", Api_Password).
+		ApiHandler("/logout", Api_Logout).
+		ApiHandler("/say", Api_Say).
+		ApiHandler("/list_messages", Api_ListMessages)
 }

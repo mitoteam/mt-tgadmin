@@ -2,102 +2,84 @@ package app
 
 import (
 	"fmt"
-	"log"
-	"strings"
 	"time"
 
-	"github.com/gin-contrib/sessions"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/mitoteam/goappbase"
 )
 
-func (r *apiRequest) Run(path string) {
-	if path == "" {
-		//call without session check
-		r.HealthCheck()
-	} else if path == "/password" {
-		//call without session check
-		r.Password()
+func apiCheckAuth(r *goappbase.ApiRequest) bool {
+	if r.SessionGet("auth") == true {
+		return true
 	} else {
-		if r.apiCheckSession() {
-			switch strings.TrimPrefix(path, "/") {
-			case "logout":
-				r.Logout()
-
-			case "say":
-				r.Say()
-
-			case "list_messages":
-				r.ListMessages()
-
-			default:
-				message := "Unknown API request: " + path
-				log.Println(message)
-				r.setStatus("danger", message)
-			}
-		}
-	}
-
-	if r.getOutData("status") == "" {
-		r.setStatus("ok", r.getOutData("message"))
+		r.SetErrorStatus("Auth Required")
+		return false
 	}
 }
 
-func (r *apiRequest) HealthCheck() {
-	r.setStatus("ok", "API working")
-	r.setOutData("auth", fmt.Sprintf("%t", r.session.Get("auth")))
+func Api_HealthCheck(r *goappbase.ApiRequest) error {
+	r.SetOutData("auth", fmt.Sprintf("%t", r.SessionGet("auth")))
+	r.SetOkStatus("API works: " + App.AppName)
+
+	return nil
 }
 
-func (r *apiRequest) Password() {
-	if r.getInData("password") == Settings.GuiPassword {
+func Api_Password(r *goappbase.ApiRequest) error {
+	if r.GetInData("password") == Settings.GuiPassword {
 		// Set user as authenticated
-		r.session.Set("auth", true)
+		r.SessionSet("auth", true)
 
-		r.session.Options(sessions.Options{
-			MaxAge: 24 * 3600,
-			Path:   "/",
-		})
-
-		r.session.Save()
-
-		r.setStatus("ok", "You are authorized!")
+		r.Session().Save()
+		r.SetOkStatus("You are authorized")
 	} else {
-		r.setStatus("danger", "Wrong password")
+		r.SetErrorStatus("Wrong password!")
 	}
+	return nil
 }
 
-func (r *apiRequest) Logout() {
-	r.session.Clear()
+func Api_Logout(r *goappbase.ApiRequest) error {
+	if !apiCheckAuth(r) {
+		return nil
+	}
 
-	r.session.Options(sessions.Options{
-		MaxAge: -1, //remove
-		Path:   "/",
-	})
+	r.SessionClear()
+	r.SetOkStatus("Good bye!")
 
-	r.session.Save()
-
-	r.setStatus("info", "Good bye!")
+	return nil
 }
 
-func (r *apiRequest) Say() {
-	text := r.getInData("message")
+func Api_Say(r *goappbase.ApiRequest) error {
+	if !apiCheckAuth(r) {
+		return nil
+	}
+
+	text := r.GetInData("message")
 	text = PrepareTelegramHtml(text)
 	msg := tgbotapi.NewMessage(Settings.BotChatID, text)
 	msg.ParseMode = "HTML"
 
-	if reply_to := r.getInDataInt("reply_to", 0); reply_to > 0 {
+	if reply_to := r.GetInDataInt("reply_to", 0); reply_to > 0 {
 		msg.ReplyToMessageID = reply_to
 	}
 
-	if r.getInDataInt("silent", 0) != 0 {
+	if r.GetInDataInt("silent", 0) != 0 {
 		msg.DisableNotification = true
 	}
 
-	tgBot.Send(msg)
+	if _, err := tgBot.Send(msg); err != nil {
+		r.SetErrorStatus("Error sending message: " + err.Error())
+		return nil
+	}
 
 	//log.Println("Said:", text)
+	return nil
 }
 
-func (r *apiRequest) ListMessages() {
+func Api_ListMessages(r *goappbase.ApiRequest) error {
+	if !apiCheckAuth(r) {
+		return nil
+	}
+
 	updates_config := tgbotapi.NewUpdate(0)
 	updates_config.Timeout = 1
 	updates_config.Limit = 100
@@ -106,8 +88,8 @@ func (r *apiRequest) ListMessages() {
 
 	updates_list, err := tgBot.GetUpdates(updates_config)
 	if err != nil {
-		r.setError(err.Error())
-		return
+		r.SetErrorStatus(err.Error())
+		return nil
 	}
 
 	list := make([]*apiMessage, 0, len(updates_list))
@@ -132,5 +114,6 @@ func (r *apiRequest) ListMessages() {
 
 	//log.Println("Updates count: ", len(list))
 
-	r.setOutData("list", list)
+	r.SetOutData("list", list)
+	return nil
 }

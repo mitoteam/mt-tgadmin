@@ -23,10 +23,15 @@ func main() {
 
 	app.App.AppSettingsFilename = ".bot.yml"
 
+	//router
 	app.App.BuildWebRouterF = app.BuildWebRouter
 
+	//API
+	app.BuildWebApiRouting(app.App)
+
+	//initialization
 	app.App.PreRunF = func() error {
-		err := app.InitApi()
+		err := app.InitTgApi()
 
 		return err
 	}

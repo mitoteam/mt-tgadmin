@@ -241,6 +241,10 @@ function ApiRequest(path, data, component, responseHandler)
       {
         MtData.status.kind = "success";
       }
+      else if(response.status == "error")
+      {
+        MtData.status.kind = "danger";
+      }
       else
       {
         MtData.status.kind = response.status;
