@@ -22,19 +22,12 @@ func BuildWebRouter(r *gin.Engine) {
 	r.GET("/", WebIndex)
 }
 
-type indexData struct {
-	Global  interface{}
-	AppInfo *goappbase.AppBase
-	Auth    bool
-}
-
 func WebIndex(c *gin.Context) {
 	session := sessions.Default(c)
 
-	data := &indexData{
-		AppInfo: App,
-		Auth:    session.Get("auth") == true,
-	}
-
-	c.HTML(http.StatusOK, "index.html", data)
+	//c.HTML(http.StatusOK, "index.html", data)
+	c.HTML(http.StatusOK, "index.html", gin.H{
+		"AppInfo": App,
+		"Auth":    session.Get("auth") == true,
+	})
 }
