@@ -1,21 +1,23 @@
+# File was created automatically by 'mt-tgadmin init' command. There are all
+# available options listed here with its default values. Recommendation is to edit options you
+# want to change and remove all others with default values to keep this as simple as possible.
+#
+# Created on: 2024-04-09T23:25:51+03:00
+#
 
-# File created automatically by 'mt-tgadmin init' command. There are all available
-# options listed here with its default values. Recommendation is to edit options you
-# want to change and remove all others to keep this as simple as possible.
-#
-# Created on: 2022-11-11T15:46:52+03:00
-#
+# Production mode
+production: true
+# Base external site URL (with protocol and port, no trailing slash)
+base_url: "https://example.com"
+
+# Webserver port number
+webserver_port: 15080
+# Secret string to encrypt cookies. Required in Production mode.
+webserver_cookie_secret: "Please change this to something unique in production environment"
 
 # Bot authorization token
 bot_token: "5745757811:AADOGQhUinxdvNСlXUРSZGВ0vlrd_qхWlR0"
 bot_chat_id: -234543
 
-# GUI cookie secret key
-gui_cookie_secret_key: "Please change this in production environment"
-
 # GUI access password
 gui_password: "mitoteam"
-# Web GUI hostname
-gui_hostname: "localhost"
-# Web GUI port number
-gui_port: 15080
