@@ -46,7 +46,6 @@ func WebIndex(c *gin.Context) {
 	session := sessions.Default(c)
 
 	data := &indexData{
-		Global:  Global,
 		AppInfo: App,
 		Auth:    session.Get("auth") == true,
 	}

@@ -6,11 +6,13 @@ import (
 )
 
 func main() {
+	//default settings
 	app.Settings = &app.AppSettingsType{
 		GuiPassword: "mitoteam",
 	}
 	app.Settings.WebserverPort = 15080
 
+	//create app and set it up
 	app.App = goappbase.NewAppBase(app.Settings)
 
 	app.App.AppName = "mt-tgadmin"
@@ -29,5 +31,10 @@ func main() {
 		return err
 	}
 
+	//global state default values
+	app.App.Global["BotInfo"] = "[undefined]"
+	app.App.Global["ChatInfo"] = "[undefined]"
+
+	//do all the job
 	app.App.Run()
 }

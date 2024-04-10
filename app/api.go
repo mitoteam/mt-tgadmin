@@ -17,10 +17,6 @@ import (
 var tgBot *tgbotapi.BotAPI
 
 func InitApi() error {
-	if len(Settings.GuiCookieSecretKey) < 32 {
-		return errors.New("gui_cookie_secret_key should be at least 32 characters long")
-	}
-
 	if len(Settings.BotToken) == 0 {
 		return errors.New("bot_token required")
 	}
@@ -31,8 +27,8 @@ func InitApi() error {
 		return err
 	}
 
-	Global.BotInfo = tgBot.Self.FirstName + " " + tgBot.Self.LastName + " (@" + tgBot.Self.UserName + ")"
-	log.Printf("Authorized on telegram bot: %s\n", Global.BotInfo)
+	App.Global["BotInfo"] = tgBot.Self.FirstName + " " + tgBot.Self.LastName + " (@" + tgBot.Self.UserName + ")"
+	log.Printf("Authorized on telegram bot: %s\n", App.Global["BotInfo"].(string))
 
 	if Settings.BotChatID == 0 {
 		return errors.New("bot_chat_id required")
@@ -43,8 +39,8 @@ func InitApi() error {
 		return err
 	}
 
-	Global.ChatInfo = chat.Type + " \"" + chat.Title + "\", " + chat.InviteLink
-	log.Printf("Chat info: %s\n", Global.ChatInfo)
+	App.Global["ChatInfo"] = chat.Type + " \"" + chat.Title + "\", " + chat.InviteLink
+	log.Printf("Chat info: %s\n", App.Global["ChatInfo"].(string))
 
 	return nil
 }

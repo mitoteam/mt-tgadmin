@@ -9,15 +9,15 @@
   </head>
   <body>
     <script type="application/javascript">
-      var mtAuth = {{.Auth}}
+      var mtAuth = {{.Auth}};
     </script>
 
     <div class="container border m-5 p-3 bg-light">
       <h1>{{.AppInfo.AppName}}</h1>
       <p class="small text-muted">v.{{.AppInfo.Version}}, commit {{.AppInfo.BuildCommit}}, built with {{.AppInfo.BuildWith}} at {{.AppInfo.BuildTime}}</p>
       <p>
-        <b>Bot</b>: {{.Global.BotInfo}}<br>
-        <b>Chat</b>: {{.Global.ChatInfo}}
+        <b>Bot</b>: {{.AppInfo.Global.BotInfo}}<br>
+        <b>Chat</b>: {{.AppInfo.Global.ChatInfo}}
       </p>
 
       <div id="app">
@@ -26,7 +26,6 @@
         <component-main v-if="session"></component-main>
         <component-auth v-else=""></component-auth>
       </div>
-
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha256-3gQJhtmj7YnV1fmtbVcnAV6eI4ws0Tr48bVZCThtCGQ=" crossorigin="anonymous"></script>
