@@ -27,7 +27,7 @@ func main() {
 	app.App.BuildWebRouterF = app.BuildWebRouter
 
 	//API
-	app.BuildWebApiRouting(app.App)
+	app.BuildWebApiRouter(app.App)
 
 	//initialization
 	app.App.PreRunF = func() error {
