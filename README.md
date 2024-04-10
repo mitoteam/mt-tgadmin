@@ -10,7 +10,7 @@
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/mitoteam/mt-tgadmin)](https://github.com/mitoteam/mt-tgadmin/commits)
 [![GitHub downloads](https://img.shields.io/github/downloads/mitoteam/mt-tgadmin/total)](https://github.com/mitoteam/mt-tgadmin/releases)
 
-Telegram bot to send messages to groups, channels and supergroups. Possible to send messages anonymously as admin.
+Simple GUI to send messages from Telegram bot to send to group, channel or supergroup. Possible to send messages anonymously as admin.
 
 ## How To
 
