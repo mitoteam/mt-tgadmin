@@ -17,7 +17,7 @@ func main() {
 
 	app.App.AppName = "mt-tgadmin"
 	app.App.ExecutableName = "mt-tgadmin"
-	app.App.LongDescription = `simple telegram bot Web GUI based manager to send messages to groups.
+	app.App.LongDescription = `Simple telegram bot Web GUI to send messages to groups.
 
 	Copyright: MiTo Team, https://mito-team.com`
 
