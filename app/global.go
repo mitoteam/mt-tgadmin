@@ -18,3 +18,13 @@ var (
 	App      *goappbase.AppBase
 	Settings *AppSettingsType
 )
+
+func init() {
+	//default settings
+	Settings = &AppSettingsType{
+		GuiPassword: "mitoteam",
+	}
+
+	//default values for goappbase.AppSettingsBase options
+	Settings.WebserverPort = 15080
+}

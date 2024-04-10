@@ -6,12 +6,6 @@ import (
 )
 
 func main() {
-	//default settings
-	app.Settings = &app.AppSettingsType{
-		GuiPassword: "mitoteam",
-	}
-	app.Settings.WebserverPort = 15080
-
 	//create app and set it up
 	app.App = goappbase.NewAppBase(app.Settings)
 
