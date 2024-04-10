@@ -22,7 +22,9 @@ Before setting up `mt-tgadmin` you need to register your bot with **@BotFather**
 * Add created bot to your group.
 * Obtaining group's **chatID**: Open [@RawDataBot](https://t.me/rawdatabot) and follow it instructions.
 
-You will need bot's **token** and **chatID** to setup `mt-tgadmin`:
+### Install
+
+You will need bot's **token** and **chatID** to run `mt-tgadmin`.
 
 * Unpack archive for you platform to desired location (there is just one executable file in archive).
 * Run `mt-tgadmin init` to create simple config to start with.
@@ -30,3 +32,7 @@ You will need bot's **token** and **chatID** to setup `mt-tgadmin`:
 * Run `mt-tgadmin run` to check the setup. You should be able to open WebGUI at this point. Press `Ctrl + C` to stop it if everything is OK.
 * Run `mt-tgadmin install` to register it as daemon.
 * Consider using nginx or other webserver as reverse proxy to use TLS (HTTP**S**) and other extended http features.
+
+### Upgrade
+
+* Just unpack newer version binary and restart process (or service).
