@@ -1,7 +1,6 @@
 package app
 
 import (
-	"fmt"
 	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -18,7 +17,7 @@ func apiCheckAuth(r *goappbase.ApiRequest) bool {
 }
 
 func Api_HealthCheck(r *goappbase.ApiRequest) error {
-	r.SetOutData("auth", fmt.Sprintf("%t", r.SessionGet("auth")))
+	r.SetOutData("auth", apiCheckAuth(r))
 	r.SetOkStatus("API works: " + App.AppName)
 
 	return nil

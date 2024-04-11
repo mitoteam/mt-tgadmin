@@ -31,7 +31,7 @@ func WebIndex(c *gin.Context) {
 // builds API routing and handlers for goappbase
 func BuildWebApiRouter(app *goappbase.AppBase) {
 	app.WebApiPathPrefix = "/api"
-	app.WebApiEnableGet = !Settings.Production // in production mode only
+	app.WebApiEnableGet = !Settings.Production // in DEV mode only
 
 	app.
 		ApiHandler("/ping", Api_HealthCheck).
