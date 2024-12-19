@@ -16,7 +16,7 @@ Simple self-hosted web GUI to send messages from Telegram bot to group, channel 
 
 Single-page web GUI with just one (password protected) form to sent messages from Telegram bot to group, channel or supergroup without giving people admin access to telegram group or channel.
 
-![screenshot](graphics/screenshot.png)
+<img src="graphics/screenshot.png" width="320">
 
 ## How To
 
