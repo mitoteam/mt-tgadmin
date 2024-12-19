@@ -4,10 +4,10 @@ import (
 	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"github.com/mitoteam/goappbase"
+	"github.com/mitoteam/goapp"
 )
 
-func apiCheckAuth(r *goappbase.ApiRequest) bool {
+func apiCheckAuth(r *goapp.ApiRequest) bool {
 	if r.SessionGet("auth") == true {
 		return true
 	} else {
@@ -16,14 +16,14 @@ func apiCheckAuth(r *goappbase.ApiRequest) bool {
 	}
 }
 
-func Api_HealthCheck(r *goappbase.ApiRequest) error {
+func Api_HealthCheck(r *goapp.ApiRequest) error {
 	r.SetOutData("auth", apiCheckAuth(r))
 	r.SetOkStatus("API works: " + App.AppName)
 
 	return nil
 }
 
-func Api_Password(r *goappbase.ApiRequest) error {
+func Api_Password(r *goapp.ApiRequest) error {
 	if r.GetInData("password") == Settings.GuiPassword {
 		// Set user as authenticated
 		r.SessionSet("auth", true)
@@ -36,7 +36,7 @@ func Api_Password(r *goappbase.ApiRequest) error {
 	return nil
 }
 
-func Api_Logout(r *goappbase.ApiRequest) error {
+func Api_Logout(r *goapp.ApiRequest) error {
 	if !apiCheckAuth(r) {
 		return nil
 	}
@@ -47,7 +47,7 @@ func Api_Logout(r *goappbase.ApiRequest) error {
 	return nil
 }
 
-func Api_Say(r *goappbase.ApiRequest) error {
+func Api_Say(r *goapp.ApiRequest) error {
 	if !apiCheckAuth(r) {
 		return nil
 	}
@@ -74,7 +74,7 @@ func Api_Say(r *goappbase.ApiRequest) error {
 	return nil
 }
 
-func Api_ListMessages(r *goappbase.ApiRequest) error {
+func Api_ListMessages(r *goapp.ApiRequest) error {
 	if !apiCheckAuth(r) {
 		return nil
 	}

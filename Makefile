@@ -2,4 +2,4 @@
 EXECUTABLE_NAME := mt-tgadmin
 
 #do the job
-include goappbase/Makefile.inc.mk
+include internal/goapp/Makefile.inc.mk

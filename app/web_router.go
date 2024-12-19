@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	"github.com/mitoteam/goappbase"
+	"github.com/mitoteam/goapp"
 )
 
 func BuildWebRouter(r *gin.Engine) {
@@ -28,8 +28,8 @@ func WebIndex(c *gin.Context) {
 	})
 }
 
-// builds API routing and handlers for goappbase
-func BuildWebApiRouter(app *goappbase.AppBase) {
+// builds API routing and handlers for goapp
+func BuildWebApiRouter(app *goapp.AppBase) {
 	app.WebApiPathPrefix = "/api"
 	app.WebApiEnableGet = !Settings.Production // in DEV mode only
 

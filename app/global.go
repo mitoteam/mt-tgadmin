@@ -2,11 +2,11 @@
 package app
 
 import (
-	"github.com/mitoteam/goappbase"
+	"github.com/mitoteam/goapp"
 )
 
 type AppSettingsType struct {
-	goappbase.AppSettingsBase `yaml:",inline"`
+	goapp.AppSettingsBase `yaml:",inline"`
 
 	BotToken  string `yaml:"bot_token" yaml_comment:"Bot authorization token"`
 	BotChatID int64  `yaml:"bot_chat_id" yaml_comment:"Telegram 'chat_id' int64 value"`
@@ -15,7 +15,7 @@ type AppSettingsType struct {
 }
 
 var (
-	App      *goappbase.AppBase
+	App      *goapp.AppBase
 	Settings *AppSettingsType
 )
 
@@ -25,6 +25,6 @@ func init() {
 		GuiPassword: "mitoteam",
 	}
 
-	//default values for goappbase.AppSettingsBase options
+	//default values for goapp.AppSettingsBase options
 	Settings.WebserverPort = 15080
 }

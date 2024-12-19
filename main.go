@@ -1,13 +1,13 @@
 package main
 
 import (
-	"github.com/mitoteam/goappbase"
+	"github.com/mitoteam/goapp"
 	"github.com/mitoteam/mt-tgadmin/app"
 )
 
 func main() {
 	//create app and set it up
-	app.App = goappbase.NewAppBase(app.Settings)
+	app.App = goapp.NewAppBase(app.Settings)
 
 	app.App.AppName = "mt-tgadmin"
 	app.App.ExecutableName = "mt-tgadmin"
