@@ -2,15 +2,15 @@
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/mitoteam/mt-tgadmin)](https://goreportcard.com/report/github.com/mitoteam/mt-tgadmin)
 [![GitHub](https://img.shields.io/github/license/mitoteam/mt-tgadmin)](https://github.com/mitoteam/mt-tgadmin/blob/main/LICENSE)
-
 [![GitHub Version](https://img.shields.io/github/v/release/mitoteam/mt-tgadmin?logo=github)](https://github.com/mitoteam/mt-tgadmin)
 [![GitHub Release Date](https://img.shields.io/github/release-date/mitoteam/mt-tgadmin)](https://github.com/mitoteam/mt-tgadmin/releases)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/mitoteam/mt-tgadmin)
 [![GitHub contributors](https://img.shields.io/github/contributors-anon/mitoteam/mt-tgadmin)](https://github.com/mitoteam/mt-tgadmin/graphs/contributors)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/mitoteam/mt-tgadmin)](https://github.com/mitoteam/mt-tgadmin/commits)
 [![GitHub downloads](https://img.shields.io/github/downloads/mitoteam/mt-tgadmin/total)](https://github.com/mitoteam/mt-tgadmin/releases)
+[![Build&Tests](https://github.com/mitoteam/mt-tgadmin/actions/workflows/go.yml/badge.svg)](https://github.com/mitoteam/mt-tgadmin/actions/workflows/go.yml)
 
-Simple self-hosted web GUI to send messages from Telegram bot to group, channel or supergroup. Possible to send messages anonymously as admin.
+Simple **self-hosted** web-GUI to send messages from Telegram bot to group, channel or supergroup. Possible to send messages anonymously as admin.
 
 ## Idea
 
@@ -22,7 +22,7 @@ Single-page web GUI with just one (password protected) form to sent messages fro
 
 We try to keep `mt-tgadmin help` accurate.
 
-Before setting up `mt-tgadmin` you need to register your bot with **@BotFather**, add bot to desired group and obtain this group's **chatID**.
+Before setting up `mt-tgadmin` you need to register your bot with [@BotFather](https://t.me/botfather), add bot to desired group and obtain this group's **chatID**.
 
 * Registering new bot with [@BotFather](https://t.me/botfather) (useful [How To](https://core.telegram.org/bots/features#creating-a-new-bot))
 * Add created bot to your group.
