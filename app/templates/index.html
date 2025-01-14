@@ -16,7 +16,6 @@
       <div class="border p-3 bg-light">
         <h1>{{.AppInfo.AppName}}</h1>
         <p class="text-muted">{{.AppInfo.LongDescription}}</p>
-        <p class="small text-muted">v.{{.AppInfo.Version}}, commit {{.AppInfo.BuildCommit}}, built with {{.AppInfo.BuildWith}} at {{.AppInfo.BuildTime}}</p>
         <p>
           <b>Bot</b>: {{.AppInfo.Global.BotInfo}}<br>
           <b>Chat</b>: {{.AppInfo.Global.ChatInfo}}
@@ -30,17 +29,24 @@
         </div>
       </div>
 
-      <div class="d-flex justify-content-between text-muted mt-3">
+      <div class="d-flex justify-content-between mt-3 p-3 border bg-light">
         <div>
-          <a href="https://www.mito-team.com" target="_blank">MiTo Team</a>
+          <div>
+            {{.AppInfo.AppName}} v.{{.AppInfo.Version}} <span class="small ps-3">{{.AppInfo.BuildTime}}</span>
+          </div>
+          <a href="https://github.com/mitoteam/mt-tgadmin"><img alt="GitHub Release" src="https://img.shields.io/github/v/release/mitoteam/mt-tgadmin?style=flat-square&amp;logo=github&amp;label=latest%20version"></a>
         </div>
-        <div>
-          <a class="github-button" href="https://github.com/mitoteam/mt-tgadmin" data-color-scheme="no-preference: light; light: light; dark: dark;" data-show-count="true" aria-label="Star mitoteam/mt-tgadmin on GitHub" target="_blank">mitoteam/mt-tgadmin</a>
+        <div class="text-end">
+          <div>
+            by <a href="https://www.mito-team.com" target="_blank">MiTo Team</a>
+          </div>
+          <div class ="small text-muted">
+            Making world better since 2005
+          </div>
         </div>
       </div>
     </div>
 
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha256-3gQJhtmj7YnV1fmtbVcnAV6eI4ws0Tr48bVZCThtCGQ=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@3.4.21/dist/vue.global.min.js"></script>
     <script src="/assets/ckeditor.min.js"></script>
