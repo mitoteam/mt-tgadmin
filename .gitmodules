@@ -1,8 +1,3 @@
-[submodule "mttools"]
-	path = pkg/mttools
-    url = https://github.com/mitoteam/mttools.git
-    branch = main
-    ignore = all # ignore hash changes
 [submodule "goapp"]
 	path = internal/goapp
     url = https://github.com/mitoteam/goapp.git
