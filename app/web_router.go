@@ -25,6 +25,7 @@ func WebIndex(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.html", gin.H{
 		"AppInfo": App,
 		"Auth":    session.Get("auth") == true,
+		"Motto":   goapp.MOTTO,
 	})
 }
 
