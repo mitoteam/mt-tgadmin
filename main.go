@@ -17,7 +17,7 @@ func main() {
 
 	app.App.AppSettingsFilename = ".bot.yml"
 
-	//router
+	//use default gin router
 	app.App.BuildWebRouterF = app.BuildWebRouter
 
 	//API
