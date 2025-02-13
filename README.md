@@ -8,7 +8,7 @@
 [![GitHub contributors](https://img.shields.io/github/contributors-anon/mitoteam/mt-tgadmin)](https://github.com/mitoteam/mt-tgadmin/graphs/contributors)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/mitoteam/mt-tgadmin)](https://github.com/mitoteam/mt-tgadmin/commits)
 [![GitHub downloads](https://img.shields.io/github/downloads/mitoteam/mt-tgadmin/total)](https://github.com/mitoteam/mt-tgadmin/releases)
-[![Build&Tests](https://github.com/mitoteam/mt-tgadmin/actions/workflows/go.yml/badge.svg)](https://github.com/mitoteam/mt-tgadmin/actions/workflows/go.yml)
+[![Build&Tests](https://github.com/mitoteam/mt-tgadmin/actions/workflows/tests.yml/badge.svg)](https://github.com/mitoteam/mt-tgadmin/actions/workflows/tests.yml)
 
 Simple **self-hosted** web-GUI to send messages from Telegram bot to group, channel or supergroup. Possible to send messages anonymously as admin.
 
