@@ -7,7 +7,7 @@ import (
 
 // embedded assets and templates
 //
-//go:embed assets/*.min.js
+//go:embed assets/*.min.js assets/vue.global.prod.js
 //go:embed assets/*.css
 //go:embed assets/favicon.ico
 //go:embed templates/*.html
