@@ -13,7 +13,7 @@ jobs:
     - name: Set environment variables
       run: echo "TERM=linux" >> "$GITHUB_ENV"
 
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       with:
         submodules: recursive
 
@@ -40,7 +40,7 @@ jobs:
 
     - name: Create GitHub Release
       id: release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         draft: true
         tag_name: "v${{ env.MT_VERSION }}"
