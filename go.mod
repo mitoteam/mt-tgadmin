@@ -1,6 +1,6 @@
 module github.com/mitoteam/mt-tgadmin
 
-go 1.24.0
+go 1.25.0
 
 //DEV versions of modules
 //replace github.com/mitoteam/mttools => ../mttools
